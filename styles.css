@@ -16,10 +16,13 @@
 
 .display {
   height: 100px;
+  margin-left: auto;
 }
 
 .row {
   display: flex;
+  justify-content: center;
+  align-items: center;
   flex-grow: 1;
 }
 
@@ -30,5 +33,15 @@
   border: 1px solid red;
   width: 100px;
   height: 100px;
+  flex-grow: 1;
+  cursor: pointer;
 }
 
+.clear {
+  flex-grow: 2;
+}
+
+.division,
+.backspace {
+  flex-grow: 0.2;
+}
