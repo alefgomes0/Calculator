@@ -1,9 +1,11 @@
+html {
+  box-sizing: border-box;
+}
+
 .calculator-wrapper {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 100svh;
-  min-height: 100vh;
 }
 
 .calculator {
@@ -15,8 +17,19 @@
 }
 
 .display {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
   height: 100px;
   margin-left: auto;
+}
+
+.former-number {
+  flex-grow: 0.5;
+}
+
+.current-number {
+  flex-grow: 1;
 }
 
 .row {
@@ -44,4 +57,9 @@
 .division,
 .backspace {
   flex-grow: 0.2;
+}
+
+.current-number {
+  font-size: 28px;
+  font-weight: 600;
 }
