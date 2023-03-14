@@ -1,3 +1,20 @@
+const clear = document.querySelector(".clear");
+const topNumber = document.querySelector(".former-number");
+const bottomNumber = document.querySelector(".current-number");
+let displayNumbers = "";
+const calculatorOperators = document.querySelectorAll(".operator");  
+const buttons = document.querySelectorAll(".number");
+const result = document.querySelector(".equals");
+
+
+let firstNumbers;
+let lastNumbers;
+let operation = null;
+let operationChecker = null;
+let operationMade = null;
+let resultOperation;
+
+
 function sum(a, b) {
   return a + b;
 }
@@ -43,43 +60,55 @@ function clearDisplay() {
   firstNumbers = "";
   displayNumbers = "";
   operation = null;
-  return 0;
+  operationChecker = null;
+  operationMade = null;
+  resultOperation = null;
 } 
 
-const clear = document.querySelector(".clear");
-const topNumber = document.querySelector(".former-number");
-const bottomNumber = document.querySelector(".current-number");
-let displayNumbers = "";
-const calculatorOperators = document.querySelectorAll(".operator");  
-const buttons = document.querySelectorAll(".number");
-const result = document.querySelector(".equals");
-
-let firstNumbers;
-let lastNumbers;
-let operation = null;
 
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
+    if(operationMade === true && operationChecker === null) {
+      clearDisplay();
+    }
     displayNumbers += button.textContent;
     bottomNumber.textContent = displayNumbers;
   })
 })
 
+
+
 calculatorOperators.forEach((sign) => {
   sign.addEventListener("click", () => {
     operation = sign.textContent;
     firstNumbers = displayNumbers;
-    topNumber.textContent = `${displayNumbers} ${operation}`;
+    topNumber.textContent = `${displayNumbers} ${operation} `;
     bottomNumber.textContent = "";
     displayNumbers = "";
+    operationChecker = true;
+    if(operationMade === true) {
+      topNumber.textContent = `${resultOperation} ${operation} `;
+    }
   })
 })    
 
 result.addEventListener("click", () => {
-  if (operation != null) {
-    topNumber.textContent = `${firstNumbers} ${operation} ${displayNumbers} ${"="}`;
-    bottomNumber.textContent = operate(firstNumbers, displayNumbers, operation);
+  if (operationMade != true) {
+    topNumber.textContent = `${firstNumbers} ${operation} ${displayNumbers} ${"="} `;
+    resultOperation = operate(firstNumbers, displayNumbers, operation);
+    bottomNumber.textContent = resultOperation;
+  }
+  if (operationMade === true) {
+    topNumber.textContent = `${resultOperation} ${operation} ${displayNumbers} ${"="} `;
+    resultOperation = operate(resultOperation, displayNumbers, operation);
+    bottomNumber.textContent = resultOperation;
+  }
+  if (resultOperation != null) {
+    operationMade = true;
+    operationChecker = null;
   }
 })
+
+
 
 clear.addEventListener("click", clearDisplay);
