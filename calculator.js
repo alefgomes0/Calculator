@@ -8,7 +8,8 @@ const result = document.querySelector(".equals");
 
 
 let firstNumbers;
-let lastNumbers;
+let sequence = false;
+let numberWithoutSign;
 let operation = null;
 let operationChecker = null;
 let operationMade = null;
@@ -35,6 +36,7 @@ function divide(x, y) {
 }
 
 
+
 function operate(num1, num2, operator) {
   num1 = +num1;
   num2 = +num2;
@@ -47,12 +49,16 @@ function operate(num1, num2, operator) {
     return multiply(num1, num2);
   }
   else if(operator == "/") {
+    if (num2 == 0) {
+      setTimeout(clearDisplay, 1000);
+    }
     return divide(num1, num2);
   }
   else {
     return sum(num1, num2);
   }
 }
+
 
 function clearDisplay() {
   bottomNumber.textContent = "";
@@ -63,13 +69,37 @@ function clearDisplay() {
   operationChecker = null;
   operationMade = null;
   resultOperation = null;
+  sequence = false;
 } 
+
+function showFirstResult(number0, sign, number1) {
+  topNumber.textContent = `${number0} ${sign} ${number1} ${"="} `;
+  resultOperation = operate(number0, number1, sign);
+  bottomNumber.textContent = resultOperation;
+}
+
+function showOthersResults(i, signal, n) {
+  topNumber.textContent = `${i} ${signal} ${n} ${"="} `;
+  i = operate(resultOperation, n, signal);
+  bottomNumber.textContent = i;
+}
+
+const clickEvent = new MouseEvent("click", {
+  "view": window,
+  "bubbles": true,
+  "cancelable": false
+});
 
 
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
     if(operationMade === true && operationChecker === null) {
       clearDisplay();
+    }
+    if (sequence === true) {
+      bottomNumber.textContent = "";
+      displayNumbers = "";
+      sequence = false;
     }
     displayNumbers += button.textContent;
     bottomNumber.textContent = displayNumbers;
@@ -80,29 +110,47 @@ buttons.forEach((button) => {
 
 calculatorOperators.forEach((sign) => {
   sign.addEventListener("click", () => {
-    operation = sign.textContent;
-    firstNumbers = displayNumbers;
-    topNumber.textContent = `${displayNumbers} ${operation} `;
-    bottomNumber.textContent = "";
-    displayNumbers = "";
-    operationChecker = true;
-    if(operationMade === true) {
+    if (topNumber.textContent.includes(operation)
+    && !topNumber.textContent.includes("=")
+    && bottomNumber.textContent != "") {
+      numberWithoutSign = String(topNumber.textContent.split(" ", 1));
+      operation = operation.replace("\n", "").trim();
+      resultOperation = operate(numberWithoutSign, bottomNumber.textContent, operation);
+      bottomNumber.textContent = resultOperation;
+      operation = sign.textContent;
+      topNumber.textContent = `${resultOperation} ${operation}`;
+      sequence = true;
+    }
+    
+    else {
+      operation = sign.textContent;
+      firstNumbers = displayNumbers;
+      topNumber.textContent = `${displayNumbers} ${operation} `;
+      operationChecker = true;
+      bottomNumber.textContent = "";
+      displayNumbers = "";
+    }
+
+    if (operationMade === true) {
       topNumber.textContent = `${resultOperation} ${operation} `;
     }
+    
   })
 })    
 
 result.addEventListener("click", () => {
   if (operationMade != true) {
-    topNumber.textContent = `${firstNumbers} ${operation} ${displayNumbers} ${"="} `;
-    resultOperation = operate(firstNumbers, displayNumbers, operation);
-    bottomNumber.textContent = resultOperation;
+    if (resultOperation === undefined) {
+      resultOperation = firstNumbers;
+    };
+    showFirstResult(resultOperation, operation, displayNumbers);
   }
-  if (operationMade === true) {
+  else if (operationMade === true) {
     topNumber.textContent = `${resultOperation} ${operation} ${displayNumbers} ${"="} `;
     resultOperation = operate(resultOperation, displayNumbers, operation);
     bottomNumber.textContent = resultOperation;
   }
+  
   if (resultOperation != null) {
     operationMade = true;
     operationChecker = null;
