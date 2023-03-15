@@ -93,8 +93,9 @@ function eraseNumber(number) {
 }
 
 function elementsInPlace() {
+  let topElements = topNumber.textContent.trim().split(" ", 2).length
   if (topNumber.textContent.includes(operation)
-  && bottomNumber.textContent != "") {
+  && bottomNumber.textContent != "" && topElements == 2) {
     return true;
   }
   else {
@@ -155,7 +156,7 @@ calculatorOperators.forEach((sign) => {
 
 result.addEventListener("click", () => {
   if (operationMade != true && elementsInPlace() === true) {
-    if (resultOperation === undefined) {
+    if (resultOperation === undefined || resultOperation === null) {
       resultOperation = firstNumbers;
     };
     showFirstResult(resultOperation, operation, displayNumbers);

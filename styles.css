@@ -1,5 +1,7 @@
 html {
   box-sizing: border-box;
+  font-family: "Roboto", Helvetica, sans-serif;
+  color: #4AB5A1;
 }
 
 .calculator-wrapper {
@@ -11,7 +13,6 @@ html {
 .calculator {
   display: flex;
   flex-direction: column;
-  border: 1px solid black;
   width: 450px;
   height: 600px;
 }
@@ -43,11 +44,13 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid red;
   width: 100px;
   height: 100px;
   flex-grow: 1;
-  cursor: pointer;
+}
+
+.cell:hover {
+  background-color: #3fc0b9;
 }
 
 .clear {
@@ -59,7 +62,73 @@ html {
   flex-grow: 0.2;
 }
 
+.former-number {
+  font-size: 24px;
+  font-weight: 500;
+}
+
 .current-number {
-  font-size: 28px;
-  font-weight: 600;
+  font-size: 36px;
+  font-weight: 800;
+}
+
+button {
+  background-color: #4AB5A1;
+}
+
+.number,
+.backspace {
+  font-size: 30px;
+  font-weight: 900;
+}
+
+.clear {
+  font-size: 27px;
+  font-weight: 800;
+}
+
+.division,
+.multiplication,
+.plus,
+.minus,
+.equals {
+  font-size: 30px;
+  font-weight: 900;
+}
+
+
+.calculator {
+  background-color: #B54A5E;
+}
+
+.division {
+  color: #6C4AB5;
+}
+
+.multiplication {
+  color: #B57A4A;
+}
+
+.plus {
+  color: #B54A5E;
+}
+
+.minus {
+  color: #B57A4A;
+}
+
+.equals {
+  color: #6C4AB5;
+}
+
+.number {
+  color: #B54A5E;
+}
+
+.clear {
+  color: #6C4AB5;
+}
+
+.backspace {
+  color: #B57A4A;
 }
