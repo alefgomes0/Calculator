@@ -1,4 +1,5 @@
 const clear = document.querySelector(".clear");
+const backspace = document.querySelector(".backspace");
 const topNumber = document.querySelector(".former-number");
 const bottomNumber = document.querySelector(".current-number");
 let displayNumbers = "";
@@ -78,24 +79,37 @@ function showFirstResult(number0, sign, number1) {
   bottomNumber.textContent = resultOperation;
 }
 
-function showOthersResults(i, signal, n) {
-  topNumber.textContent = `${i} ${signal} ${n} ${"="} `;
-  i = operate(resultOperation, n, signal);
-  bottomNumber.textContent = i;
+
+function eraseNumber(number) {
+  if (number === undefined) {
+    return "";
+  }
+  else if (number.length >= 1) {
+    return number.slice(0, number.length - 1);
+  }
+  else {
+    return "";
+  }
 }
 
-const clickEvent = new MouseEvent("click", {
-  "view": window,
-  "bubbles": true,
-  "cancelable": false
-});
+function elementsInPlace() {
+  if (topNumber.textContent.includes(operation)
+  && bottomNumber.textContent != "") {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
 
 
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
+    //Clear everything if the user clicks a number right after a operation with "="
     if(operationMade === true && operationChecker === null) {
       clearDisplay();
     }
+    //If the user uses operations signs instead of equals sign
     if (sequence === true) {
       bottomNumber.textContent = "";
       displayNumbers = "";
@@ -109,6 +123,7 @@ buttons.forEach((button) => {
 
 
 calculatorOperators.forEach((sign) => {
+  //In case the user does arithmetic with operation signs instead of the "=""
   sign.addEventListener("click", () => {
     if (topNumber.textContent.includes(operation)
     && !topNumber.textContent.includes("=")
@@ -139,18 +154,18 @@ calculatorOperators.forEach((sign) => {
 })    
 
 result.addEventListener("click", () => {
-  if (operationMade != true) {
+  if (operationMade != true && elementsInPlace() === true) {
     if (resultOperation === undefined) {
       resultOperation = firstNumbers;
     };
     showFirstResult(resultOperation, operation, displayNumbers);
   }
-  else if (operationMade === true) {
+  else if (operationMade === true && elementsInPlace() === true) {
     topNumber.textContent = `${resultOperation} ${operation} ${displayNumbers} ${"="} `;
     resultOperation = operate(resultOperation, displayNumbers, operation);
     bottomNumber.textContent = resultOperation;
   }
-  
+
   if (resultOperation != null) {
     operationMade = true;
     operationChecker = null;
@@ -158,5 +173,9 @@ result.addEventListener("click", () => {
 })
 
 
+backspace.addEventListener("click", () => {
+  bottomNumber.textContent = eraseNumber(bottomNumber.textContent);
+  displayNumbers = eraseNumber(displayNumbers);
+});
 
 clear.addEventListener("click", clearDisplay);
